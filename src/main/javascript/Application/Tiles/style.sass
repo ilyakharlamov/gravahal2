@@ -1,0 +1,22 @@
+.tiles-container
+  color: red
+  list-style: none
+  display: flex
+  justify-content: space-around
+  flex-flow: row wrap
+  margin-bottom: 1em
+  text-align: justify
+  text-justify: distribute-all-lines
+
+  &Item
+    line-height: 1.5em
+    display: flex
+    align-items: center
+    transition: all 400ms
+
+    &--checked
+      text-decoration: line-through
+      color: #aaa
+
+    input
+      margin-right: 7px

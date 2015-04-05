@@ -1,0 +1,23 @@
+$background: tomato
+$main: white
+.tile-item
+  padding: 5px;
+  margin-top: 10px
+  background: $background
+  width: 200px
+  height: 150px
+  color: $main
+  text-align: center
+  &-inner
+    position: relative
+    top: 10%
+  &-close
+    color: $background
+    position: relative
+    text-align: right
+    & > a
+      color: $background
+
+.tile-item:hover > .tile-item-close > a
+  color: $main
+  text-decoration: none;

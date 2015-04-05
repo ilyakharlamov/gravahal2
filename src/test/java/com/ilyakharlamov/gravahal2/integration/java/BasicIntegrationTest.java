@@ -64,12 +64,11 @@ public class BasicIntegrationTest extends TestVerticle {
       }
     });
   }
-
-  @Test
   /*
+  @Test
   This test deploys some arbitrary verticle - note that the call to testComplete() is inside the Verticle `SomeVerticle`
    */
-  public void testDeployArbitraryVerticle() {
+  /*public void testDeployArbitraryVerticle() {
     assertEquals("bar", "bar");
     container.deployVerticle(SomeVerticle.class.getName());
   }
@@ -86,7 +85,7 @@ public class BasicIntegrationTest extends TestVerticle {
         testComplete();
       }
     });
-  }
+  }*/
 
 
 }

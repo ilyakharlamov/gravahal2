@@ -1,7 +1,8 @@
 {
 
   // Java verticle
-  "main":"com.ilyakharlamov.gravahal2.PingVerticle",
+  "main":"com.ilyakharlamov.gravahal2.WebserverVerticle",
+  //"main":"com.ilyakharlamov.gravahal2.TestNet",
 
   // In this example we also provide various other versions of the main verticle, you can uncomment this and
   // play around:
