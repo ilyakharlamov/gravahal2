@@ -14,13 +14,6 @@ export default class Loginform extends React.Component {
   }
 
   render() {
-    /*{
-        if (true) {
-          <div>TRUE</div>
-        } else {
-          <div>FALSE</div>
-        }
-      }*/
     return <div className="Loginform">
       <div className="Loginform_welcomemessage" >Welcome to grava hal</div>
       <form className="Loginform_form" onSubmin={this._submit}>

@@ -5,9 +5,9 @@ require('./reset.css');
 import React from 'react';
 import FluxComponent from 'flummox/component'
 import Application from './Application';
-import WeatherappFlux from './Flux/WeatherappFlux';
+import GravahalFlux from './Flux/GravahalFlux';
 
-const flux = new WeatherappFlux();
+const flux = new GravahalFlux();
 
 React.render(
   <FluxComponent

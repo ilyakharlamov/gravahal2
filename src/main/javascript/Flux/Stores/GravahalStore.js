@@ -3,9 +3,6 @@ import $ from 'jQuery';
 import { Store } from 'flummox';
 import Immutable from 'immutable';
 import SockJS from 'sockjs-client';
-//import vertx from 'vertx-eventbus-client';
-//import vertx from 'vertxbus.js';
-import EventBus from '../../vertxbus'
 
 export default class GravahalStore extends Store {
   constructor ( flux ) {
@@ -55,19 +52,6 @@ export default class GravahalStore extends Store {
       type: 'attempt',
       data,
     });
-    //this.sock.close();
-     /*sock.onopen = function() {
-         console.log('open');
-     };
-     sock.onmessage = function(e) {
-         console.log('message', e.data);
-     };
-     sock.onclose = function() {
-         console.log('close');
-     };
-
-     sock.send('test');
-     sock.close();*/
   }
 
   handleConnectConfirm (data) {
