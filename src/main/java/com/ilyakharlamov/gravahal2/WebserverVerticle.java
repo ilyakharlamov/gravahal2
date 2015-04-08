@@ -29,6 +29,9 @@ import org.vertx.java.platform.Verticle;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.ilyakharlamov.gravahal2.web.Game;
+import com.ilyakharlamov.gravahal2.web.GameSession;
+import com.ilyakharlamov.gravahal2.web.Player;
 import com.ilyakharlamov.gravahal2.web.SessionStorage;
 import com.ilyakharlamov.gravahal2.web.User;
 
@@ -46,8 +49,6 @@ public class WebserverVerticle extends Verticle {
 		final EventBus eventBus = vertx.eventBus();
 		final Logger logger = container.logger();
 		final SessionStorage sessionStorage = new SessionStorage();
-		
-
  
 		// 1) HTTP Server
 		RouteMatcher httpRouteMatcher = new RouteMatcher().get("/", new
@@ -92,7 +93,7 @@ public class WebserverVerticle extends Verticle {
 		        		+"\n\t sock.uri():"+sock.uri()
 		        		);
 		        final User user = new User(vertx.eventBus(), sock.writeHandlerID());
-		        user.sendMessageAction("connectConfirm", null);
+		        user.setAvailableGamesessions(sessionStorage);
 
 		        // Message handler
 		        sock.dataHandler(new Handler<Buffer>() {
@@ -105,6 +106,28 @@ public class WebserverVerticle extends Verticle {
 		              if (!"ping".equals(type) && (action == null|| action.length()==0)) logger.error(String.format("data %s expected to contain action", buffer));
 		              if ("setName".equals(action)) {
 		            	  user.setName(data.getString("name"));
+		              } else if ("createAndJoinGameSession".equals(action)) {
+		            	  GameSession gameSession = new GameSession();
+		            	  sessionStorage.addSession(gameSession);
+		            	  Player player = new Player(user.getName(), gameSession);
+		            	  gameSession.addPlayer(player);
+		            	  user.setSession(gameSession);
+		            	  user.setCurrentPlayer(player);
+		              } else if ("joinGameSession".equals(action)) {
+		            	  String uuid = data.getString("uuid");
+		            	  logger.info("uuid:"+uuid);
+		            	  GameSession gameSession = sessionStorage.getSession(uuid);
+		            	  logger.info("Session"+gameSession);
+		            	  Player player = new Player(user.getName(), gameSession);
+		            	  gameSession.addPlayer(player);
+		            	  user.setSession(gameSession);
+		            	  user.setCurrentPlayer(player);
+		              } else if ("playTurn".equals(action)) {
+		            	  logger.info("playTurn");
+		            	  int pitid = data.getNumber("pitid").intValue();
+		            	  Player player = user.getCurrentPlayer();
+		            	  Game game = player.getGameSession().getGame();
+		            	  game.play(pitid);
 		              }
 		           }
 		        });
@@ -119,138 +142,13 @@ public class WebserverVerticle extends Verticle {
 		     }
 		  });
         
-        /*sockJSServer.setHook(new EventBusBridgeHook() 
-        {
-            @Override
-            public void handleSocketClosed(SockJSSocket sock) {
-            	logger.info("socket closed");
-            }
-
-            @Override
-            public boolean handleSendOrPub(SockJSSocket sock, boolean send, JsonObject msg, String address) {
-            	msg.putString("address", address);
-            	logger.info("handleSendOrPub");
-                return true;
-            }
-
-			@Override
-			public boolean handleAuthorise(JsonObject arg0, String sessionId,
-					Handler<AsyncResult<Boolean>> arg2) {
-				logger.info("handleAuthorise");
-				return true;
-			}
-
-			@Override
-			public void handlePostRegister(SockJSSocket arg0, String arg1) {
-				// TODO Auto-generated method stub
-				logger.info("handlePostRegister");
-				
-			}
-
-			@Override
-			public boolean handlePreRegister(SockJSSocket arg0, String arg1) {
-				// TODO Auto-generated method stub
-				logger.info("handlePreRegister");
-				return true;
-			}
-
-			@Override
-			public boolean handleSocketCreated(SockJSSocket sock) {
-				logger.info("socket created:"+sock.remoteAddress()+" "+sock.writeHandlerID());
-				return true;
-			}
-
-			@Override
-			public boolean handleUnregister(SockJSSocket arg0, String arg1) {
-				// TODO Auto-generated method stub
-				logger.info("handleUnregister");
-
-				return true;
-			}
-        });*/
         sockJSServer.bridge(config, inboundPermitted, outboundPermitted);
-        //vertx.eventBus().registerHandler("msg.client.1", )
-       // vertx.eventBus().
-        vertx.eventBus().registerHandler("msg.from.client",new Handler<Message<JsonObject>>() {
+        /*vertx.eventBus().registerHandler("msg.from.client",new Handler<Message<JsonObject>>() {
             public void handle(Message<JsonObject> event) {
             	logger.info("on msg.client.1 event.replyAddress():"+event.replyAddress()+" event.body():"+event.body()+" event.address:"+event.address());
             }
-        });
-        
-        
-        
-
-		
-		// Create SockJS Server
-		/*  SockJSServer sockJSServer = vertx.createSockJSServer(httpServer);
-
-		  sockJSServer = sockJSServer.installApp(new JsonObject().putString("prefix", "/eventbus"), new Handler<SockJSSocket>() {
-
-		     public void handle(final SockJSSocket sock) {
-		        System.out.println("New session detected!");
-		        // Message handler
-		        sock.dataHandler(new Handler<Buffer>() {
-		           public void handle(Buffer buffer) {
-		              System.out.println("In dataHandler");
-		           }
-		        });
-
-		        // Session end handler
-		        sock.endHandler(new Handler<Void>() {
-		           @Override
-		           public void handle(Void arg) {
-		              System.out.println("In endHandler");
-		           }
-		        });
-		     }
-		  });*/
-		
+        });*/
 		httpServer.listen(8080);
- 
-		/*// 2) Websockets Chat Server
-				vertx.createHttpServer().websocketHandler(new Handler<ServerWebSocket>() {
-					@Override
-					public void handle(final ServerWebSocket ws) {
-						logger.info(String.format("ws.path():%s", ws.path()));
-						final Matcher m = gameeventsPattern.matcher(ws.path());
-						if (!m.matches()) {
-							ws.reject();
-							return;
-						}
-				 
-						final String chatRoom = m.group(1);
-						final String id = ws.textHandlerID();
-						logger.info("registering new connection with id: " + id + " for chat-room: " + chatRoom);
-						vertx.sharedData().getSet("chat.room." + chatRoom).add(id);
-				 
-						ws.closeHandler(new Handler<Void>() {
-							@Override
-							public void handle(final Void event) {
-								logger.info("un-registering connection with id: " + id + " from chat-room: " + chatRoom);
-								vertx.sharedData().getSet("chat.room." + chatRoom).remove(id);
-							}
-						});
-				 
-						ws.dataHandler(new Handler<Buffer>() {
-							@Override
-							public void handle(final Buffer data) {
-				 
-								ObjectMapper m = new ObjectMapper();
-								try {
-									JsonNode rootNode = m.readTree(data.toString());
-									((ObjectNode) rootNode).put("received", new Date().toString());
-									String jsonOutput = m.writeValueAsString(rootNode);
-									logger.info("json generated: " + jsonOutput);
-									for (Object chatter : vertx.sharedData().getSet("chat.room." + chatRoom)) {
-										eventBus.send((String) chatter, jsonOutput);
-									}
-								} catch (IOException e) {
-									ws.reject();
-								}
-							}
-						});
-				 
-					}
-				}).listen(8090);*/
+
 	}
 }
