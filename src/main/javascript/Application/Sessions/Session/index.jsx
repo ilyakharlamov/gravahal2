@@ -7,9 +7,7 @@ export default class Session extends React.Component {
   }
 
   joinGameSession () {
-    console.log("this.props.flux", this.props.flux);
-    console.log("this.props.flux.getActions('gravahalapp').joinGameSession", this.props.flux.getActions('gravahalapp').joinGameSession);
-    this.props.flux.getActions('gravahalapp').joinGameSession({uuid:this.props.uuid});
+    this.props.flux.getActions('gravahalapp').joinGameSession({uuid: this.props.uuid});
   }
 
   render () {

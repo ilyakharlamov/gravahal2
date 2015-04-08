@@ -23,47 +23,56 @@ module.exports = function(options) {
       publicPath: '',
       filename: options.production ? 'app.[hash].js' : 'app.js',
     },
+    eslint: {
+      configFile: './conf/.eslintrc'
+    },
     module: {
       preLoaders: options.lint ? [
         {
           test: /\.jsx?$/,
-          exclude: /node_modules/,
+          include: /src/,
           loader: 'eslint-loader',
         }
       ] : [],
       loaders: [
         {
           test: /\.js$/,
-          exclude: /node_modules/,
+          include: /src/,
           loaders: jsLoaders,
         },
         {
           test: /\.jsx$/,
-          exclude: /node_modules/,
+          include: /src/,
           loaders: options.production ? jsLoaders : ['react-hot-loader'].concat(jsLoaders),
         },
         {
           test: /\.css$/,
+          include: /src/,
           loader: cssLoaders,
         },
         {
           test: /\.sass$/,
+          include: /src/,
           loader: sassLoaders,
         },
         {
           test: /\.png$/,
+          include: /src/,
           loader: "url-loader?limit=100000&mimetype=image/png",
         },
         {
           test: /\.svg$/,
+          include: /src/,
           loader: "url-loader?limit=100000&mimetype=image/svg+xml",
         },
         {
           test: /\.gif$/,
+          include: /src/,
           loader: "url-loader?limit=100000&mimetype=image/gif",
         },
         {
           test: /\.jpg$/,
+          include: /src/,
           loader: "file-loader",
         },
       ]

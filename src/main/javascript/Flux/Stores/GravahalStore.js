@@ -1,4 +1,4 @@
-/*global window,console,vertx*/
+/*global window,console*/
 import $ from 'jQuery';
 import { Store } from 'flummox';
 import Immutable from 'immutable';
@@ -12,8 +12,6 @@ export default class GravahalStore extends Store {
     this.actionids = actionids;
     this.register(actionids.attemptLogin, this.handleAttemptLogin);
     //this.register(actionids.setNameConfirm, this.handleSetNameConfirm);
-    //
-    this.register(actionids.connectConfirm, this.handleConnectConfirm);
     //
     this.register(actionids.nameChanged, this.handleNameChanged);
     //
@@ -48,19 +46,15 @@ export default class GravahalStore extends Store {
   handleAttemptLogin (data) {
     console.log(`handleAttemptLogin name: ${name}`, data);
     this.notifyServer({
-      action:'setName',
+      action: 'setName',
       type: 'attempt',
       data,
     });
   }
 
-  handleConnectConfirm (data) {
-    console.log("handleConnectConfirm");
-  }
-
   handleNameChanged (payload) {
     var state = this.state;
-    state.name=payload.name
+    state.name = payload.name;
     this.setState(state);
   }
 
@@ -72,44 +66,44 @@ export default class GravahalStore extends Store {
 
   handleCreateAndJoinGameSession () {
     this.notifyServer({
-      action: "createAndJoinGameSession",
+      action: 'createAndJoinGameSession',
       data: {},
     });
   }
 
   handleJoinGameSession (payload) {
     this.notifyServer({
-      action: "joinGameSession",
+      action: 'joinGameSession',
       data: payload,
     });
   }
 
   handleGamesessionChanged (payload) {
-    this._changeState("gamesession", payload);
+    this._changeState('gamesession', payload);
   }
 
   handleCurrentPlayerChanged (payload) {
-    console.log("handleCurrentPlayerChanged payload:", payload);
-    this._changeState("currentPlayer", payload);
+    console.log('handleCurrentPlayerChanged payload:', payload);
+    this._changeState('currentPlayer', payload);
   }
 
   handlePlayTurn (payload) {
     this.notifyServer({
-      action: "playTurn",
+      action: 'playTurn',
       data: payload,
     });
   }
 
   onMessage (message) {
-    console.log("onmessage", message, 'data', data);
     const data = JSON.parse(message.data);
+    console.debug('onmessage', message, 'data', data);
 
     //actionName
     const actionName = data && data.action;
-    console.log("onmessage actionName:", actionName, "data", data);
     const action = this.flux.getActions('gravahalapp')[actionName];
-    console.log(typeof action);
-    if ( !action ) throw new Error(`Action "${actionName}" is not found`);
+    if ( !action ) {
+      throw new Error(`Action "${actionName}" is not found`);
+    }
     //payload
     const payload = data.payload;
     action.call(action, payload);

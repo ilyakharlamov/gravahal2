@@ -19,14 +19,14 @@ export default class Playerboard extends React.Component {
 			var pit = playerboard.playerPits[idx];
 			var td;
 			if (playerboard.isYourTurn) {
-				td = <td><a href='#' onClick={this.handleClick.bind(this, idx+1)}>{pit.stones}</a></td>;
+				td = <td><a href='#' onClick={this.handleClick.bind(this, idx + 1)}>{pit.stones}</a></td>;
 			} else {
 				td = <td>{pit.stones}</td>;
-			} 
-			playerPits.push(td)
+			}
+			playerPits.push(td);
 		}
 		const opponentPits = playerboard.opponentPits && playerboard.opponentPits.map((pit)=>{
-			return <td>{pit.stones}</td>
+			return <td>{pit.stones}</td>;
 		});
 		const opponentGravahal = <td rowSpan="2" className="gravahal">{playerboard.opponentGravahal.stones}</td>;
 		return <div>

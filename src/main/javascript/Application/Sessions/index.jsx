@@ -12,11 +12,9 @@ export default class Sessions extends React.Component {
   }
 
   render () {
-    console.log('render');
     const sessions = this.props.sessions && this.props.sessions.length ? this.props.sessions.map((i)=>{
       return <Session flux={this.props.flux} uuid={i.uuid} players={i.players} />;
     }) : <div>There are no active game sessions. You can create one.</div>;
-    console.log("sessions", sessions);
     return <div>
       {sessions}
       <br />
