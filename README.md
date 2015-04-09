@@ -8,7 +8,13 @@ React.js for UI rendering, with Flux design pettern. It is very fast for DOM ren
 Websocket as a transport between vertx and react. Failover to SockJS / long polling / iframe for old browsers or providers not supporting websocket.
 
 # Quick start
+```
+git clone https://github.com/ilyakharlamov/gravahal2.git
+cd gravahal2
 mvn clean compile vertx:runMod
+```
+navigate to http://localhost:8080/
+
 
 # About
 Node.js is not needed for production, it is only used during development and release, to compile SASS to CSS, minimify javascript and transcompile from EcmaScript 6 to good old javascript etc.
