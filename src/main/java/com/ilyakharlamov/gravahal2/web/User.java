@@ -84,9 +84,7 @@ public class User implements Observer{
 		if (obs instanceof SessionStorage) this.sendMessageAction("availableGamesessionsChanged", availableGamesessions.toJson());
 		if (obs instanceof Player) {
 			this.sendMessageAction("currentPlayerChanged", currentPlayer.toJson());
-			System.out.println("User.update:currentPlayer changed, message sent");
 		}
-		System.out.println("Observable:"+obs+" obj:"+obj);
 	}
 
 }

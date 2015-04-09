@@ -119,9 +119,9 @@ public class WebserverVerticle extends Verticle {
 		            	  GameSession gameSession = sessionStorage.getSession(uuid);
 		            	  logger.info("Session"+gameSession);
 		            	  Player player = new Player(user.getName(), gameSession);
-		            	  gameSession.addPlayer(player);
 		            	  user.setSession(gameSession);
 		            	  user.setCurrentPlayer(player);
+		            	  gameSession.addPlayer(player);
 		              } else if ("playTurn".equals(action)) {
 		            	  logger.info("playTurn");
 		            	  int pitid = data.getNumber("pitid").intValue();

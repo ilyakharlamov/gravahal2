@@ -15,7 +15,7 @@ export default class Session extends React.Component {
       return <div>{p.name}</div>;
     });
     const joinButton = this.props.players.length === 1 && <input className="Session_join_button" type="button" value="Join" onClick={this.joinGameSession}/>;
-    return <div>{this.props.uuid} players: {players}
+    return <div>Session: {this.props.uuid} players: {players}
       {joinButton}
     </div>;
   }

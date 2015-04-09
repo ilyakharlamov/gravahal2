@@ -125,7 +125,6 @@ public class Game extends Observable implements Observer, Jsonizable{
 			jsonplayers.add(player.toJson());
 		}
 		jsonobj.putArray("players", jsonplayers);
-		//board
 		return jsonobj;
 	}
 

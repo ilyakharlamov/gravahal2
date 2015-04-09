@@ -12,7 +12,7 @@ export default class Application extends React.Component {
     return <FluxComponent
       connectToStores="gravahalapp"
       render={storeState => {
-        const loginArea = storeState.name ? <div>Hello, {storeState.name}</div> : <Loginform {...storeState} />;
+        const loginArea = storeState.name ? <div>Hello, player {storeState.name}</div> : <Loginform {...storeState} />;
         const currentPlayerArea = storeState.currentPlayer && <Currentplayer flux={storeState.flux} currentPlayer={storeState.currentPlayer} />;
         const sessionArea = storeState.name && !storeState.gamesession && <Sessions sessions={storeState.availableGamesessions} {...storeState}/>;
         return <div className="Application">

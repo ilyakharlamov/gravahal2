@@ -4,10 +4,13 @@ import java.util.Observable;
 import java.util.Observer;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.vertx.java.core.json.JsonElement;
 import org.vertx.java.core.json.JsonObject;
 
 public class Player extends Observable implements Jsonizable, Observer {
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+
 	private final String name;
 	private final GameSession gameSession;
 
@@ -37,6 +40,7 @@ public class Player extends Observable implements Jsonizable, Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
+		logger.info(String.format("Player %s notified",name));
 		setChanged();
 		notifyObservers();
 	}
