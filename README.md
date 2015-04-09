@@ -13,7 +13,7 @@ git clone https://github.com/ilyakharlamov/gravahal2.git
 cd gravahal2
 mvn clean compile vertx:runMod
 ```
-navigate to http://localhost:8080/
+navigate to http://localhost:8080/ from two different browser tabs
 
 
 # About
